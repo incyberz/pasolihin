@@ -1,1 +1,191 @@
-kalkulator modulo
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pa Solihin - 12345 - Kalkulator Aritmatika Modular</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4fd;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .formula {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- KOTAK 1: KALKULATOR MODULO UTAMA -->
+    <div class="container">
+        <h2>Kalkulator Modulo Basik</h2>
+        <div class="input-group">
+            <label for="numA">Bilangan (a):</label>
+            <input type="number" id="numA" value="23">
+        </div>
+        <div class="input-group">
+            <label for="numM">Modulus (m):</label>
+            <input type="number" id="numM" value="5" min="1">
+        </div>
+        <button onclick="hitungModulo()">Hitung Modulo</button>
+        
+        <div class="result" id="hasilModulo">
+            Hasil: 23 mod 5 = 3
+            <div class="formula">Penjelasan: 23 = 5 × 4 + 3</div>
+        </div>
+    </div>
+
+    <!-- KOTAK 2: PENGECEK KONGRUENSI -->
+    <div class="container">
+        <h2>Pengecek Kongruensi</h2>
+        <p style="font-size: 14px; color: #666;">Memeriksa apakah pernyataan <strong>a ≡ b (mod m)</strong> bernilai Benar/Salah.</p>
+        <div class="input-group">
+            <label for="congA">Nilai a:</label>
+            <input type="number" id="congA" value="38">
+        </div>
+        <div class="input-group">
+            <label for="congB">Nilai b:</label>
+            <input type="number" id="congB" value="14">
+        </div>
+        <div class="input-group">
+            <label for="congM">Modulus (m):</label>
+            <input type="number" id="congM" value="12" min="1">
+        </div>
+        <button onclick="cekKongruensi()" style="background-color: #2ecc71;">Cek Kongruensi</button>
+        
+        <div class="result" id="hasilKongruensi" style="background-color: #eafaf1; border-left-color: #2ecc71;">
+            Hasil: 38 ≡ 14 (mod 12) adalah <strong>BENAR</strong>
+            <div class="formula">Penjelasan: (38 - 14) = 24, dan 24 habis dibagi 12.</div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Fungsi pembantu untuk menangani modulo bilangan negatif dengan benar secara matematis
+        function modMatematis(a, m) {
+            return ((a % m) + m) % m;
+        }
+
+        function hitungModulo() {
+            const a = parseInt(document.getElementById('numA').value);
+            const m = parseInt(document.getElementById('numM').value);
+            const hasilDiv = document.getElementById('hasilModulo');
+
+            if (isNaN(a) || isNaN(m)) {
+                hasilDiv.innerHTML = "Harap masukkan angka yang valid.";
+                return;
+            }
+            if (m <= 0) {
+                hasilDiv.innerHTML = "Modulus (m) harus lebih besar dari 0.";
+                return;
+            }
+
+            // Hitung sisa dan hasil bagi bilangan bulat (quotient)
+            const r = modMatematis(a, m);
+            const q = Math.floor((a - r) / m);
+
+            hasilDiv.innerHTML = `
+                Hasil: <strong>${a} mod ${m} = ${r}</strong>
+                <div class="formula">Penjelasan kebalikan: ${a} = ${m} × ${q} + ${r}</div>
+            `;
+        }
+
+        function cekKongruensi() {
+            const a = parseInt(document.getElementById('congA').value);
+            const b = parseInt(document.getElementById('congB').value);
+            const m = parseInt(document.getElementById('congM').value);
+            const hasilDiv = document.getElementById('hasilKongruensi');
+
+            if (isNaN(a) || isNaN(b) || isNaN(m)) {
+                hasilDiv.innerHTML = "Harap masukkan angka yang valid.";
+                return;
+            }
+            if (m <= 0) {
+                hasilDiv.innerHTML = "Modulus (m) harus lebih besar dari 0.";
+                return;
+            }
+
+            const selisih = a - b;
+            const apakahHabisDibagi = (selisih % m) === 0;
+
+            if (apakahHabisDibagi) {
+                hasilDiv.innerHTML = `
+                    Hasil: <strong>${a} ≡ ${b} (mod ${m})</strong> adalah <span style="color: #27ae60;"><strong>BENAR</strong></span>
+                    <div class="formula">Penjelasan: (${a} - ${b}) = ${selisih}, di mana ${selisih} habis dibagi ${m} (hasil: ${selisih/m}).</div>
+                `;
+            } else {
+                const sisaA = modMatematis(a, m);
+                const sisaB = modMatematis(b, m);
+                hasilDiv.innerHTML = `
+                    Hasil: <strong>${a} ≡ ${b} (mod ${m})</strong> adalah <span style="color: #c0392b;"><strong>SALAH</strong></span>
+                    <div class="formula">Penjelasan: ${a} mod ${m} = ${sisaA}, sedangkan ${b} mod ${m} = ${sisaB} (Sisa bagi tidak sama).</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
